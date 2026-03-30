@@ -10,15 +10,15 @@ st.markdown("""
 /* Global Styles */
 .stApp { 
     background-color: #ffffff; 
-    color: #2d2d2d; 
+    color: #1a1a1a; 
 }
 
 /* University Header */
 .uni-header {
-    background-color: #ffffff;
-    padding: 1rem 2rem;
-    border-bottom: 3px solid #8b1d1d;
-    margin-bottom: 2rem;
+    background-color: #fefcfc;
+    padding: 0.8rem 1.5rem;
+    border-bottom: 2px solid #8b1d1d;
+    margin-bottom: 1.5rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -26,169 +26,125 @@ st.markdown("""
 
 .uni-logo {
     color: #8b1d1d;
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 800;
-    letter-spacing: -1px;
+    letter-spacing: -0.5px;
     text-transform: uppercase;
 }
 
-/* Force Global White Background and Black Text for ALL Inputs and Widgets */
+/* Sidebar Styling */
+[data-testid="stSidebar"] {
+    background-color: #ffffff !important;
+    border-right: 1px solid #eeeeee !important;
+}
+
+[data-testid="stSidebarNav"] {
+    display: none !important; /* Hide default nav as we use custom sidebar buttons */
+}
+
+.sidebar-title {
+    color: #8b1d1d;
+    font-size: 1.2rem;
+    font-weight: 800;
+    padding: 1rem;
+    border-bottom: 1px solid #fef2f2;
+    margin-bottom: 1rem;
+}
+
+/* Universal Input/Widget Refinement */
 input, textarea, select, div[data-baseweb="select"] > div {
     background-color: #ffffff !important;
     color: #000000 !important;
-    caret-color: #000000 !important;
-    border: 1px solid #8b1d1d !important;
+    border: 1px solid #d1d5db !important;
+    border-radius: 6px !important;
+    transition: border-color 0.2s ease !important;
 }
 
-/* Force ALL Labels and text to be black */
-[data-testid="stWidgetLabel"] p, .stMarkdown p, .stMarkdown li, span, label, div, [data-testid="stHeader"] {
-    color: #000000 !important;
+input:focus {
+    border-color: #8b1d1d !important;
 }
 
-/* Specific Streamlit Widget Selectors */
-[data-testid="stTextInput"] input, 
-[data-testid="stNumberInput"] input, 
-[data-testid="stTextArea"] textarea,
-[data-testid="stSelectbox"] div[data-baseweb="select"] > div,
-[data-testid="stDateInput"] input,
-[data-testid="stTimeInput"] input {
-    background-color: #ffffff !important;
-    color: #000000 !important;
-    border: 1px solid #8b1d1d !important;
-    border-radius: 4px !important;
+/* Fix: Ensure labels and general text are strictly dark for visibility */
+[data-testid="stWidgetLabel"] p, .stMarkdown p, .stMarkdown h1, .stMarkdown h2, .stMarkdown h3, 
+label, span, .stHeader, .sidebar-title, div[data-testid="stExpander"] p {
+    color: #1a1a1a !important;
 }
 
-/* Dropdown / Selectbox internal arrow fix */
-[data-testid="stSelectbox"] svg {
-    fill: #8b1d1d !important;
-    color: #8b1d1d !important;
+/* Specific Sidebar text visibility */
+[data-testid="stSidebar"] * {
+    color: #333333 !important;
 }
 
-/* Number Input + / - buttons fix */
-[data-testid="stNumberInput"] button {
-    background-color: #ffffff !important;
-    color: #000000 !important;
-    border: 1px solid #8b1d1d !important;
-}
-[data-testid="stNumberInput"] button:hover {
-    background-color: #fef2f2 !important;
-}
-
-/* Autocomplete/Dropdown styling - Aggressive Overrides */
-div[data-baseweb="popover"], 
-div[data-baseweb="menu"], 
-div[role="listbox"], 
-ul[role="listbox"],
-[data-baseweb="select"] + div,
-[data-baseweb="popover"] * {
-    background-color: #ffffff !important;
-    color: #000000 !important;
+/* Specific Sidebar Navigation Buttons */
+.stSidebar .stButton button {
+    width: 100% !important;
+    border: none !important;
+    border-radius: 0px !important;
+    background-color: transparent !important;
+    color: #333333 !important;
+    display: flex !important;
+    justify-content: flex-start !important;
+    padding: 0.6rem 1rem !important;
+    font-weight: 500 !important;
+    text-transform: none !important;
+    border-left: 3px solid transparent !important;
 }
 
-div[role="option"], 
-[data-baseweb="menu"] li,
-div[data-baseweb="popover"] div {
-    background-color: #ffffff !important;
-    color: #000000 !important;
-}
-
-div[role="option"]:hover, 
-[data-baseweb="menu"] li:hover,
-div[data-baseweb="popover"] div:hover {
+.stSidebar .stButton button:hover {
     background-color: #fef2f2 !important;
     color: #8b1d1d !important;
+    border-left: 3px solid #8b1d1d !important;
 }
 
-/* Tabs Styling */
-button[data-baseweb="tab"] {
-    background-color: #ffffff !important;
-    color: #000000 !important;
-    border: 1px solid #8b1d1d !important;
-    border-bottom: none !important;
-    margin-right: 5px !important;
-    transition: all 0.3s ease !important;
-}
-
-button[data-baseweb="tab"]:hover {
-    background-color: #8b1d1d !important;
-    color: #ffffff !important;
-}
-
-button[data-baseweb="tab"][aria-selected="true"] {
-    border-bottom: 3px solid #8b1d1d !important;
-    color: #8b1d1d !important;
-    font-weight: bold !important;
-}
-
-/* Dataframe/Table */
-div[data-testid="stDataFrame"], div[data-testid="stTable"] {
-    background-color: #ffffff !important;
-    border: 2px solid #8b1d1d !important;
-    border-radius: 8px !important;
-    padding: 1px !important;
-}
-
-/* Aggressive internal grid lines for all table-like roles */
-[data-testid="stDataFrame"] [role="gridcell"], 
-[data-testid="stDataFrame"] [role="columnheader"],
-[data-testid="stDataFrame"] td, 
-[data-testid="stDataFrame"] th,
-div[data-testid="stTable"] td,
-div[data-testid="stTable"] th {
-    border: 1px solid #8b1d1d !important;
-    font-weight: bold !important;
-    color: #000000 !important;
-}
-
-div[data-testid="stDataFrame"] *, div[data-testid="stTable"] * {
-    background-color: #ffffff !important;
-    color: #000000 !important;
-}
-
-/* Tab Panels (Information Tabs) */
-[data-baseweb="tab-panel"] {
-    background-color: #ffffff !important;
-    color: #000000 !important;
-    border: 1px solid #8b1d1d !important;
-    padding: 2rem !important;
-    border-radius: 0 0 8px 8px !important;
-}
-
-/* Typography */
-h1, h2, h3 { 
-    font-family: 'Playfair Display', serif; 
-    color: #8b1d1d !important; 
-    border-left: 10px solid #8b1d1d;
-    padding-left: 20px;
-    margin-bottom: 1.5rem !important;
-}
-
-/* Forms */
+/* Forms and Layout */
 [data-testid="stForm"], .stForm { 
     background-color: #ffffff !important; 
-    border: 1px solid #8b1d1d !important; 
-    border-top: 8px solid #8b1d1d !important;
+    border: 1px solid #e5e7eb !important; 
+    border-top: 5px solid #8b1d1d !important;
     border-radius: 8px !important; 
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1) !important; 
-    padding: 3rem !important; 
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important; 
+    padding: 2rem !important; 
 }
 
-/* Buttons (Regular, Nav, and Submit) */
-.stButton button, [data-testid="baseButton-primary"], [data-testid="baseButton-secondary"], 
-[data-testid="stFormSubmitButton"] button { 
-    background-color: #ffffff !important; 
-    color: #000000 !important; 
-    border: 2px solid #8b1d1d !important;
-    border-radius: 4px !important; 
-    text-transform: uppercase;
-    font-weight: 700 !important;
-    padding: 0.6rem 2rem !important;
-    transition: all 0.3s ease !important;
-}
-
-.stButton button:hover, [data-testid="stFormSubmitButton"] button:hover { 
+/* Buttons (Main Content) */
+.stButton button, [data-testid="baseButton-primary"], [data-testid="stFormSubmitButton"] button { 
     background-color: #8b1d1d !important; 
     color: #ffffff !important; 
+    border: 1px solid #8b1d1d !important;
+    border-radius: 6px !important; 
+    font-weight: 600 !important;
+    padding: 0.5rem 1.5rem !important;
+    transition: all 0.2s ease !important;
+}
+
+.stButton button:hover { 
+    background-color: #6e1717 !important; 
+    box-shadow: 0 4px 12px rgba(139, 29, 29, 0.2) !important;
+}
+
+/* Dataframes and Tables */
+div[data-testid="stDataFrame"], div[data-testid="stTable"] {
+    border: 1px solid #e5e7eb !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+}
+
+/* Restore gridlines for tables */
+div[data-testid="stTable"] table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+}
+
+div[data-testid="stTable"] th, div[data-testid="stTable"] td {
+    border: 1px solid #8b1d1d !important;
+    padding: 10px !important;
+    color: #1a1a1a !important;
+}
+
+div[data-testid="stTable"] th {
+    background-color: #f9fafb !important;
+    color: #8b1d1d !important;
+    font-weight: 700 !important;
 }
 </style>
 
@@ -222,6 +178,10 @@ def login():
     with st.form("login_form"):
         username = st.text_input("Username")
         password = st.text_input("Password", type="password")
+        st.info("**Student Login Guide:**  \n"
+                "**Username:** your name (lowercase, no spaces, e.g. 'johndoe')  \n"
+                "**Password:** your University Roll No (e.g. 'AU2100010')")
+        
         if st.form_submit_button("Login"):
             user = db.authenticate_user(username, password)
             if user:
@@ -261,27 +221,58 @@ if not st.session_state.logged_in:
 else:
     role = st.session_state.role
     
-    if role == "ADMIN":
-        menu = ["Admin Dashboard", "Register Club", "Register Student", "Manage Clubs", "Manage Students", "Add Venue", "Logout"]
-    elif role == "CLUB":
-        menu = ["Club Dashboard", "My Profile", "Add Event", "My Events", "Edit/Delete My Events", "Logout"]
-    elif role == "STUDENT":
-        menu = ["Student Dashboard", "Browse Events", "Register for Event", "My Registrations", "Submit Feedback", "Logout"]
-    else:
-        menu = []
-    
-    # Custom Horizontal Navigation Bar (No Circles)
-    if "choice" not in st.session_state:
-        st.session_state.choice = menu[0]
+    # --- SIDEBAR NAVIGATION ---
+    with st.sidebar:
+        st.markdown(f'<div class="sidebar-title">Club Connect</div>', unsafe_allow_html=True)
+        st.markdown(f"**Logged in as:** {role}")
         
-    cols = st.columns(len(menu))
-    for i, item in enumerate(menu):
-        if cols[i].button(item, key=f"nav_{item}"):
-            st.session_state.choice = item
-            if item == "Logout":
-                logout()
-            st.rerun()
+        # Define internal name to display name mapping with icons
+        nav_items = {
+            "ADMIN": {
+                "Admin Dashboard": "📊 Admin Dashboard",
+                "Register Club": "🏢 Register Club",
+                "Register Student": "👨‍🎓 Register Student",
+                "Manage Clubs": "🛠️ Manage Clubs",
+                "Manage Students": "👥 Manage Students",
+                "Add Venue": "📍 Add Venue",
+                "Logout": "🚪 Logout"
+            },
+            "CLUB": {
+                "Club Dashboard": "📊 Club Dashboard",
+                "My Profile": "👤 My Profile",
+                "Add Event": "📅 Add Event",
+                "Post Announcement": "📢 Post Announcement",
+                "Take Attendance": "✅ Take Attendance",
+                "Manage Members": "👥 Manage Members",
+                "Edit/Delete My Events": "🛠️ Edit/Delete My Events",
+                "Logout": "🚪 Logout"
+            },
+            "STUDENT": {
+                "Student Dashboard": "🏠 Student Dashboard",
+                "Latest Announcements": "📢 Announcements",
+                "Join a Club": "🤝 Join a Club",
+                "My Memberships": "📋 My Memberships",
+                "Browse Events": "🔍 Browse Events",
+                "Register for Event": "📝 Register for Event",
+                "My Registrations": "🎫 My Registrations",
+                "Submit Feedback": "⭐ Submit Feedback",
+                "Logout": "🚪 Logout"
+            }
+        }
+        
+        current_nav = nav_items.get(role, {})
+        
+        if "choice" not in st.session_state:
+            st.session_state.choice = list(current_nav.keys())[0]
             
+        for internal_name, display_name in current_nav.items():
+            # Apply active styling check
+            if st.button(display_name, key=f"nav_{internal_name}", use_container_width=True):
+                st.session_state.choice = internal_name
+                if internal_name == "Logout":
+                    logout()
+                st.rerun()
+                
     choice = st.session_state.choice
 
     # Hero Section / Title
@@ -453,9 +444,81 @@ else:
                              st.error("Event could not be added.")
                         # Errors are already shown by database.py via st.error if result is -1
 
-        elif choice == "My Events":
-            st.header("My Events")
-            st.table(db.get_events_by_club(st.session_state.club_id))
+        elif choice == "Post Announcement":
+            st.header("Post a New Announcement")
+            with st.form("announcement_form"):
+                title = st.text_input("Announcement Title")
+                message = st.text_area("Message Content")
+                if st.form_submit_button("Post Announcement"):
+                    if db.add_announcement(st.session_state.club_id, title, message) > 0:
+                        st.success("Announcement posted for all students!")
+            
+            st.subheader("Your Previous Announcements")
+            prev_ann = db.get_announcements_by_club(st.session_state.club_id)
+            if not prev_ann.empty:
+                st.table(prev_ann)
+            else:
+                st.info("No announcements posted yet.")
+
+        elif choice == "Take Attendance":
+            st.header("Event Attendance & Registrations")
+            
+            # Fetch the club's events
+            my_events = db.get_events_by_club(st.session_state.club_id)
+            if my_events.empty:
+                st.info("You need to create an event first to manage attendance.")
+            else:
+                event_options = {f"{row['EVENT_NAME']} ({row['EVENT_DATE']})": row['EVENT_ID'] for _, row in my_events.iterrows()}
+                selected_event_label = st.selectbox("Select Event", options=list(event_options.keys()))
+                event_id = event_options[selected_event_label]
+                
+                tab1, tab2 = st.tabs(["📝 View Registrations", "✅ Mark Attendance"])
+                
+                with tab1:
+                    st.subheader(f"Registered Students for {selected_event_label}")
+                    registrations_df = db.get_registrations_for_event(event_id)
+                    if not registrations_df.empty:
+                        st.dataframe(registrations_df, use_container_width=True)
+                        st.info(f"Total Registrations: {len(registrations_df)}")
+                    else:
+                        st.info("No students have registered for this event yet.")
+                
+                with tab2:
+                    st.subheader("Mark Student Attendance")
+                    with st.form("attendance_form", clear_on_submit=True):
+                        roll_no = st.text_input("Enter Student Roll No (e.g. AU2100010)").strip().upper()
+                        if st.form_submit_button("Mark Present"):
+                            if roll_no:
+                                db.mark_attendance(event_id, roll_no)
+                            else:
+                                st.warning("Please enter a roll number.")
+                    
+                    st.markdown("---")
+                    st.subheader("Attendance List")
+                    attendance_df = db.get_attendance_for_event(event_id)
+                    if not attendance_df.empty:
+                        st.table(attendance_df)
+                    else:
+                        st.info("No students marked present yet for this event.")
+
+        elif choice == "Manage Members":
+            st.header("Manage Club Members")
+            members_df = db.get_club_members(st.session_state.club_id)
+            if members_df.empty:
+                st.info("No members have joined your club yet.")
+            else:
+                st.subheader("Member Roster")
+                st.table(members_df)
+                
+                st.markdown("---")
+                st.subheader("Update Member Role")
+                with st.form("update_role_form"):
+                    m_id = st.number_input("Membership ID", min_value=1, step=1)
+                    new_role = st.selectbox("Assign New Role", ["MEMBER", "COORDINATOR", "PRESIDENT", "SECRETARY"])
+                    if st.form_submit_button("Update Role"):
+                        if db.update_member_role(m_id, new_role) > 0:
+                            st.success("Member role updated successfully!")
+                            st.rerun()
 
         elif choice == "Edit/Delete My Events":
             st.header("Manage My Existing Events")
@@ -538,6 +601,49 @@ else:
             if not profile.empty:
                 st.subheader(f"Hello, {profile['STUDENT_NAME'].iloc[0]}")
                 st.write(f"**Department:** {profile['DEPARTMENT'].iloc[0]}")
+
+        elif choice == "Latest Announcements":
+            st.header("📢 Recent Club Announcements")
+            announcements = db.get_latest_announcements(limit=10)
+            if not announcements.empty:
+                for idx, row in announcements.iterrows():
+                    with st.container():
+                        st.markdown(f"""
+                        <div style="border: 2px solid #8b1d1d; border-radius: 8px; padding: 20px; margin-bottom: 15px; background-color: #ffffff; box-shadow: 2px 2px 5px rgba(0,0,0,0.05);">
+                            <h3 style="margin-top: 0; color: #8b1d1d; border-left: none; padding-left: 0;">{row['TITLE']}</h3>
+                            <p style="font-size: 0.9rem; color: #555; margin-bottom: 10px;">
+                                <b>Posted by:</b> {row['CLUB_NAME']} | <b>Date:</b> {row['POSTED_AT']}
+                            </p>
+                            <hr style="border: 0; border-top: 1px solid #eee; margin: 10px 0;">
+                            <p style="color: #000; font-size: 1.1rem; line-height: 1.6;">{row['MESSAGE']}</p>
+                        </div>
+                        """, unsafe_allow_html=True)
+            else:
+                st.info("No announcements have been posted yet.")
+
+        elif choice == "Join a Club":
+            st.header("Join University Clubs")
+            clubs = db.get_all_clubs()
+            if clubs.empty:
+                st.info("No clubs are currently active.")
+            else:
+                st.subheader("Available Clubs")
+                # Filter out sensitive info for browsing
+                display_clubs = clubs[['CLUB_ID', 'CLUB_NAME', 'CLUB_TYPE', 'DESCRIPTION']]
+                st.table(display_clubs)
+                
+                with st.form("join_club_form"):
+                    c_id = st.number_input("Enter Club ID to Join", min_value=1, step=1)
+                    if st.form_submit_button("Join Club"):
+                        db.join_club(st.session_state.student_id, c_id)
+
+        elif choice == "My Memberships":
+            st.header("My Club Memberships")
+            my_mem = db.get_student_memberships(st.session_state.student_id)
+            if my_mem.empty:
+                st.info("You haven't joined any clubs yet. Go to 'Join a Club' to get started!")
+            else:
+                st.table(my_mem)
 
         elif choice == "Browse Events":
             st.header("Browse Upcoming Events")

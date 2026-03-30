@@ -109,7 +109,7 @@ def authenticate_user(username, password):
     query = """
     SELECT USER_ID, ROLE, CLUB_ID, STUDENT_ID 
     FROM APP_USERS 
-    WHERE USERNAME = :1 AND PASSWORD = :2 AND IS_ACTIVE = 'Y'
+    WHERE LOWER(USERNAME) = LOWER(:1) AND PASSWORD = :2 AND IS_ACTIVE = 'Y'
     """
     conn = get_connection()
     if conn:
@@ -297,6 +297,16 @@ def get_student_registrations(student_id):
     """
     return fetch_data(query, [student_id])
 
+def get_registrations_for_event(event_id):
+    query = """
+    SELECT s.STUDENT_NAME, s.ROLL_NO, s.DEPARTMENT, s.EMAIL, r.REGISTRATION_DATE, r.REGISTRATION_STATUS
+    FROM REGISTRATIONS r
+    JOIN STUDENTS s ON r.STUDENT_ID = s.STUDENT_ID
+    WHERE r.EVENT_ID = :1
+    ORDER BY r.REGISTRATION_DATE DESC
+    """
+    return fetch_data(query, [event_id])
+
 def register_for_event(student_id, event_id):
     conn = get_connection()
     if conn:
@@ -337,13 +347,71 @@ def check_if_registered(student_id, event_id):
         return res.iloc[0, 0]  # returns 'REGISTERED' or 'CANCELLED'
     return None
 
-# --- FEEDBACK ---
-def submit_feedback(student_id, event_id, rating, comments):
-    query = """
-    INSERT INTO FEEDBACK (EVENT_ID, STUDENT_ID, RATING, COMMENTS)
-    VALUES (:1, :2, :3, :4)
-    """
     return execute_query(query, (event_id, student_id, rating, comments))
+
+# --- ANNOUNCEMENTS ---
+def get_announcements_by_club(club_id):
+    query = """
+    SELECT TITLE, MESSAGE, POSTED_AT 
+    FROM ANNOUNCEMENTS 
+    WHERE CLUB_ID = :1 
+    ORDER BY POSTED_AT DESC
+    """
+    return fetch_data(query, [club_id])
+
+def get_latest_announcements(limit=5):
+    query = f"""
+    SELECT a.TITLE, a.MESSAGE, a.POSTED_AT, c.CLUB_NAME 
+    FROM ANNOUNCEMENTS a 
+    JOIN CLUBS c ON a.CLUB_ID = c.CLUB_ID 
+    ORDER BY a.POSTED_AT DESC 
+    FETCH FIRST {limit} ROWS ONLY
+    """
+    return fetch_data(query)
+
+def add_announcement(club_id, title, message):
+    return call_procedure_standard_out('proc_add_announcement', [club_id, title, message])
+
+# --- ATTENDANCE ---
+def mark_attendance(event_id, roll_no):
+    return call_procedure_standard_out('proc_mark_attendance', [event_id, roll_no])
+
+def get_attendance_for_event(event_id):
+    query = """
+    SELECT s.STUDENT_NAME, s.ROLL_NO, s.DEPARTMENT, a.MARKED_AT 
+    FROM ATTENDANCE a 
+    JOIN STUDENTS s ON a.STUDENT_ID = s.STUDENT_ID 
+    WHERE a.EVENT_ID = :1 
+    ORDER BY a.MARKED_AT DESC
+    """
+    return fetch_data(query, [event_id])
+
+# --- MEMBERSHIP ---
+def join_club(student_id, club_id):
+    return call_procedure_standard_out('proc_join_club', [student_id, club_id])
+
+def get_student_memberships(student_id):
+    query = """
+    SELECT c.CLUB_NAME, m.MEMBER_ROLE, m.JOIN_DATE, m.STATUS, c.EMAIL 
+    FROM MEMBERSHIP m 
+    JOIN CLUBS c ON m.CLUB_ID = c.CLUB_ID 
+    WHERE m.STUDENT_ID = :1
+    """
+    return fetch_data(query, [student_id])
+
+def get_club_members(club_id):
+    query = """
+    SELECT m.MEMBERSHIP_ID, s.STUDENT_NAME, s.ROLL_NO, m.MEMBER_ROLE, m.JOIN_DATE, m.STATUS 
+    FROM MEMBERSHIP m 
+    JOIN STUDENTS s ON m.STUDENT_ID = s.STUDENT_ID 
+    WHERE m.CLUB_ID = :1 
+    ORDER BY s.STUDENT_NAME
+    """
+    return fetch_data(query, [club_id])
+
+def update_member_role(membership_id, new_role):
+    query = "UPDATE MEMBERSHIP SET MEMBER_ROLE = :1 WHERE MEMBERSHIP_ID = :2"
+    return execute_query(query, [new_role, membership_id])
 
 # --- SESSIONS ---
 def create_session(user_id, ip="0.0.0.0"):

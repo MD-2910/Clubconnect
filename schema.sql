@@ -807,6 +807,117 @@ EXCEPTION
 END;
 /
 
+-- Procedure to add an announcement
+CREATE OR REPLACE PROCEDURE proc_add_announcement(
+    p_club_id IN NUMBER,
+    p_title IN VARCHAR2,
+    p_message IN VARCHAR2,
+    p_status OUT VARCHAR2,
+    p_message_out OUT VARCHAR2
+) IS
+BEGIN
+    IF p_title IS NULL OR LENGTH(p_title) < 5 THEN
+        p_status := 'ERROR';
+        p_message_out := 'Title is too short. Minimum 5 characters required.';
+        RETURN;
+    END IF;
+
+    IF p_message IS NULL OR LENGTH(p_message) < 10 THEN
+        p_status := 'ERROR';
+        p_message_out := 'Message is too short. Minimum 10 characters required.';
+        RETURN;
+    END IF;
+
+    INSERT INTO ANNOUNCEMENTS (CLUB_ID, TITLE, MESSAGE)
+    VALUES (p_club_id, p_title, p_message);
+
+    COMMIT;
+    p_status := 'SUCCESS';
+    p_message_out := 'Announcement posted successfully.';
+EXCEPTION
+    WHEN OTHERS THEN
+        ROLLBACK;
+        p_status := 'ERROR';
+        p_message_out := 'Database error: ' || SQLERRM;
+END;
+/
+
+-- Procedure to mark attendance for a student by roll number
+CREATE OR REPLACE PROCEDURE proc_mark_attendance(
+    p_event_id IN NUMBER,
+    p_roll_no IN VARCHAR2,
+    p_status OUT VARCHAR2,
+    p_message OUT VARCHAR2
+) IS
+    v_student_id NUMBER;
+BEGIN
+    -- 1. Find the student ID from roll number
+    BEGIN
+        SELECT STUDENT_ID INTO v_student_id 
+        FROM STUDENTS 
+        WHERE ROLL_NO = p_roll_no;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            p_status := 'ERROR';
+            p_message := 'Student with Roll No ' || p_roll_no || ' not found.';
+            RETURN;
+    END;
+
+    -- 2. Mark attendance
+    BEGIN
+        INSERT INTO ATTENDANCE (EVENT_ID, STUDENT_ID, ATTENDANCE_STATUS)
+        VALUES (p_event_id, v_student_id, 'PRESENT');
+        COMMIT;
+        p_status := 'SUCCESS';
+        p_message := 'Attendance marked successfully for ' || p_roll_no;
+    EXCEPTION
+        WHEN DUP_VAL_ON_INDEX THEN
+            p_status := 'SUCCESS';
+            p_message := 'Attendance already marked for ' || p_roll_no;
+    END;
+EXCEPTION
+    WHEN OTHERS THEN
+        ROLLBACK;
+        p_status := 'ERROR';
+        p_message := 'Database error: ' || SQLERRM;
+END;
+/
+
+-- Procedure for a student to join a club
+CREATE OR REPLACE PROCEDURE proc_join_club(
+    p_student_id IN NUMBER,
+    p_club_id IN NUMBER,
+    p_status OUT VARCHAR2,
+    p_message OUT VARCHAR2
+) IS
+    v_count NUMBER;
+BEGIN
+    -- Check if already a member
+    SELECT COUNT(*) INTO v_count 
+    FROM MEMBERSHIP 
+    WHERE STUDENT_ID = p_student_id AND CLUB_ID = p_club_id;
+    
+    IF v_count > 0 THEN
+        p_status := 'ERROR';
+        p_message := 'You are already a member of this club.';
+        RETURN;
+    END IF;
+
+    -- Insert new membership
+    INSERT INTO MEMBERSHIP (STUDENT_ID, CLUB_ID, MEMBER_ROLE, JOIN_DATE, STATUS)
+    VALUES (p_student_id, p_club_id, 'MEMBER', CURRENT_DATE, 'ACTIVE');
+
+    COMMIT;
+    p_status := 'SUCCESS';
+    p_message := 'Successfully joined the club!';
+EXCEPTION
+    WHEN OTHERS THEN
+        ROLLBACK;
+        p_status := 'ERROR';
+        p_message := 'Database error: ' || SQLERRM;
+END;
+/
+
 -- Procedure to add a venue
 CREATE OR REPLACE PROCEDURE proc_add_venue(
     p_name IN VARCHAR2,
